@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class KSStreamProvider {
+open class KSStreamProvider {
     
     struct Config {
         /**
@@ -42,7 +42,7 @@ public class KSStreamProvider {
         Segment data cache.
         TS filename -> data
      */
-    internal var segmentData: [String : NSData] = [:]
+    internal var segmentData: [String : Data] = [:]
     
     internal let segmentFence: AnyObject = NSObject()
     
@@ -50,11 +50,11 @@ public class KSStreamProvider {
         self.serviceUrl = serviceUrl
     }
     
-    public func isBufferEnough() -> Bool {
+    open func isBufferEnough() -> Bool {
         return bufferedSegmentCount() >= Config.tsPrebufferSize
     }
     
-    public func bufferedSegmentCount() -> Int {
+    open func bufferedSegmentCount() -> Int {
         var bufferCount = 0
         synced(segmentFence, closure: { [unowned self] in
             /**
@@ -64,32 +64,32 @@ public class KSStreamProvider {
             let bufferIndex = self.indexOfNextOutputSegment() ?? 0
             for i in bufferIndex..<self.segments.count {
                 if self.segmentData[self.segments[i].filename()] == nil { break }
-                bufferCount++
+                bufferCount += 1
             }
         })
         return bufferCount
     }
     
-    public func cachedSegmentSize() -> Int {
+    open func cachedSegmentSize() -> Int {
         return segmentData.count
     }
     
     /**
         Provide latest output playlist.
      */
-    public func providePlaylist() -> String? {
+    open func providePlaylist() -> String? {
         return outputPlaylist
     }
     
     /**
      Provide TS segment data with specified filename.
      */
-    public func provideSegment(filename: String) -> NSData? {
+    open func provideSegment(_ filename: String) -> Data? {
         return segmentData[filename]
     }
 
     internal func indexOfNextOutputSegment() -> Int? {
-        if let ts = outputSegments.last where ts != segments.last, let index = segments.indexOf(ts) {
+        if let ts = outputSegments.last, ts != segments.last, let index = segments.index(of: ts) {
             return index + 1
         }
         return nil

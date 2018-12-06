@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class KSEventProvider: KSStreamProvider {
+open class KSEventProvider: KSStreamProvider {
     
     struct Config {
         /**
@@ -27,9 +27,9 @@ public class KSEventProvider: KSStreamProvider {
     /**
         Event storage for `eventId`.
      */
-    private let storage: KSEventStorage
+    fileprivate let storage: KSEventStorage
     
-    private let playlist: HLSPlaylist
+    fileprivate let playlist: HLSPlaylist
     
     /**
         If true, manager will clean segment data cache automatically when cache is full.
@@ -38,9 +38,9 @@ public class KSEventProvider: KSStreamProvider {
      */
     var autoManageCache = false
     
-    private var consumedSegments: Set<String> = Set()
+    fileprivate var consumedSegments: Set<String> = Set()
         
-    private var outputUnchangeTimes = 0
+    fileprivate var outputUnchangeTimes = 0
     
     /**
         Represent whether preload from disk is complete.
@@ -48,14 +48,14 @@ public class KSEventProvider: KSStreamProvider {
         While initializing provider, playlist and TS data will be loaded from disk if they were cached.
         If this playlist is ended and all TS data of segments in it are available, this property will be true.
      */
-    private(set) public var completePreload = false
+    fileprivate(set) open var completePreload = false
     
-    private var ending = false
+    fileprivate var ending = false
     
-    private var buffering = false
+    fileprivate var buffering = false
     
     public override convenience init(serviceUrl: String) {
-        self.init(serviceUrl: serviceUrl, eventId: "\(NSDate.init().timeIntervalSince1970)")
+        self.init(serviceUrl: serviceUrl, eventId: "\(Date.init().timeIntervalSince1970)")
     }
     
     required public init(serviceUrl: String, eventId: String) {
@@ -84,7 +84,7 @@ public class KSEventProvider: KSStreamProvider {
         }
     }
     
-    public func cleanUp() {
+    open func cleanUp() {
         synced(segmentFence, closure: { [unowned self] in
             self.segments.removeAll()
             self.segmentData.removeAll()
@@ -93,11 +93,11 @@ public class KSEventProvider: KSStreamProvider {
         outputPlaylist = nil
     }
     
-    public func setTargetDuration(duration: Double) {
+    open func setTargetDuration(_ duration: Double) {
         playlist.targetDuration = duration
     }
     
-    public func targetDuration() -> Double? {
+    open func targetDuration() -> Double? {
         return playlist.targetDuration
     }
     
@@ -107,7 +107,7 @@ public class KSEventProvider: KSStreamProvider {
         @param filename
         @return
      */
-    public func hasSegmentData(filename: String) -> Bool {
+    open func hasSegmentData(_ filename: String) -> Bool {
         if segmentData[filename] != nil {
             return true
         } else {
@@ -123,7 +123,7 @@ public class KSEventProvider: KSStreamProvider {
     /**
         Whether playlist is ended and all data of segments in playlist exist in memory or disk.
      */
-    public func hasAllSegmentData() -> Bool {
+    open func hasAllSegmentData() -> Bool {
         if !playlist.isEnd() { return false }
         
         for ts in playlist.segments {
@@ -137,7 +137,7 @@ public class KSEventProvider: KSStreamProvider {
     /**
         Push segment to input list.
      */
-    public func push(ts: TSSegment) {
+    open func push(_ ts: TSSegment) {
         synced(segmentFence, closure: { [unowned self] in
             if !self.playlist.segmentNames.contains(ts.filename()) {
                 /* Add segment to playlist */
@@ -152,17 +152,17 @@ public class KSEventProvider: KSStreamProvider {
     /**
         Drop segment from input list if data doesn't exist.
      */
-    public func drop(ts: TSSegment) {
+    open func drop(_ ts: TSSegment) {
         synced(segmentFence, closure: { [unowned self] in
             if self.segmentData[ts.filename()] == nil {
-                if let index = self.segments.indexOf(ts) {
-                    self.segments.removeAtIndex(index)
+                if let index = self.segments.index(of: ts) {
+                    self.segments.remove(at: index)
                 }
             }
         })
     }
     
-    public func fill(ts: TSSegment, data: NSData) {
+    open func fill(_ ts: TSSegment, data: Data) {
         synced(segmentFence, closure: { [unowned self] in
             let filename = ts.filename()
             self.segmentData[filename] = data
@@ -170,27 +170,27 @@ public class KSEventProvider: KSStreamProvider {
         })
     }
     
-    public func consume(filename: String) -> NSData? {
-        return synced(segmentFence, closure: { [unowned self] () -> NSData? in
+    open func consume(_ filename: String) -> Data? {
+        return synced(segmentFence, closure: { [unowned self] () -> Data? in
             for i in 0..<self.segments.count {
                 if self.segments[i].filename() == filename {
                     self.consumedSegments.insert(filename)
-                    self.segments.removeAtIndex(i)
+                    self.segments.remove(at: i)
                     break
                 }
             }
-            return self.segmentData.removeValueForKey(filename)
+            return self.segmentData.removeValue(forKey: filename)
         })
     }
     
-    public func endPlaylist() {
+    open func endPlaylist() {
         ending = true
         buffering = false
         playlist.end = true
         updateEndingList()
     }
     
-    private func updateOutputPlaylist() -> Bool {
+    fileprivate func updateOutputPlaylist() -> Bool {
         var didUpdate = false
         synced(segmentFence, closure: { [unowned self] in
             let (newTS, startIndex): (TSSegment?, Int?) = {
@@ -219,7 +219,7 @@ public class KSEventProvider: KSStreamProvider {
                     }
                     if !self.outputSegments.contains(ts) {
                         self.outputSegments += [ts]
-                        newSegmentCount++
+                        newSegmentCount += 1
                     }
                 }
             }
@@ -247,7 +247,7 @@ public class KSEventProvider: KSStreamProvider {
         return didUpdate
     }
     
-    private func updateEndingList() {
+    fileprivate func updateEndingList() {
         synced(segmentFence, closure: { [unowned self] in
             /* Add new segments to output playlist */
             if let startIndex = self.indexOfNextOutputSegment() ?? (self.segments.first != nil ? 0 : nil) {
@@ -274,7 +274,7 @@ public class KSEventProvider: KSStreamProvider {
         })
     }
     
-    override public func providePlaylist() -> String? {
+    override open func providePlaylist() -> String? {
         /* If we don't have enough segments, start buffering */
         if outputSegments.count < Config.tsPrebufferSize && !ending {
             buffering = true
@@ -288,13 +288,13 @@ public class KSEventProvider: KSStreamProvider {
                 outputUnchangeTimes = 0
             }
             /* If output list unchanged limit hits, clean cache */
-            outputUnchangeTimes++
+            outputUnchangeTimes += 1
             if outputUnchangeTimes > Config.unchangedOutputMax {
                 synced(segmentFence, closure: { [unowned self] in
                     self.outputUnchangeTimes = 0
                     /* Drop some segments */
                     if let index = self.indexOfNextOutputSegment() {
-                        let ts = self.segments.removeAtIndex(index)
+                        let ts = self.segments.remove(at: index)
                         self.segmentData[ts.filename()] = nil
                     }
                 })
@@ -312,7 +312,7 @@ public class KSEventProvider: KSStreamProvider {
         return outputPlaylist
     }
     
-    private func isConsumed(ts: TSSegment) -> Bool {
+    fileprivate func isConsumed(_ ts: TSSegment) -> Bool {
         return consumedSegments.contains(ts.filename())
     }
 }

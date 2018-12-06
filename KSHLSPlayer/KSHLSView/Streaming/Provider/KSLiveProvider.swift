@@ -27,7 +27,7 @@ import Foundation
  *  3. Once an invalid segment(a segment without filled data) encountered, provider stops going
  *     through segment list and see if new playlist is available from valid segments.
  */
-public class KSLiveProvider: KSStreamProvider {
+open class KSLiveProvider: KSStreamProvider {
     
     struct Config {
         /**
@@ -48,15 +48,15 @@ public class KSLiveProvider: KSStreamProvider {
     /**
         Sequence number in output playlist. Starts from 0.
      */
-    private var sequenceNumber = 0
+    fileprivate var sequenceNumber = 0
     
-    private var buffering = false
+    fileprivate var buffering = false
     
-    private var saveFolderPath: String?
+    fileprivate var saveFolderPath: String?
 
-    private var saving = false
+    fileprivate var saving = false
     
-    public func cleanUp() {
+    open func cleanUp() {
         synced(segmentFence, closure: { [unowned self] in
             self.segments.removeAll()
             self.outputSegments.removeAll()
@@ -70,7 +70,7 @@ public class KSLiveProvider: KSStreamProvider {
     /**
         push segment to input list.
      */
-    public func push(ts: TSSegment) {
+    open func push(_ ts: TSSegment) {
         synced(segmentFence, closure: { [unowned self] in
             self.segments += [ts]
         })
@@ -79,17 +79,17 @@ public class KSLiveProvider: KSStreamProvider {
     /**
         Drop segment from input list if data doesn't exist.
      */
-    public func drop(ts: TSSegment) {
+    open func drop(_ ts: TSSegment) {
         synced(segmentFence, closure: { [unowned self] in
             if self.segmentData[ts.filename()] == nil {
-                if let index = self.segments.indexOf(ts) {
-                    self.segments.removeAtIndex(index)
+                if let index = self.segments.index(of: ts) {
+                    self.segments.remove(at: index)
                 }
             }
         })
     }
     
-    public func fill(ts: TSSegment, data: NSData) {
+    open func fill(_ ts: TSSegment, data: Data) {
         if !segments.contains(ts) { return }
         segmentData[ts.filename()] = data
         
@@ -102,24 +102,24 @@ public class KSLiveProvider: KSStreamProvider {
                 var overSize = self.segmentData.count - Config.tsDataCacheMax
                 while overSize > 0 {
                     if self.segments.count == 0 { break }
-                    if self.segmentData.removeValueForKey(self.segments.removeFirst().filename()) != nil {
-                        overSize--
+                    if self.segmentData.removeValue(forKey: self.segments.removeFirst().filename()) != nil {
+                        overSize = overSize - 1
                     }
                 }
             }
         })
         /* Save file */
-        if let folder = saveFolderPath where saving {
-            let filePath = (folder as NSString).stringByAppendingPathComponent(ts.filename())
-            data.writeToFile(filePath, atomically: true)
+        if let folder = saveFolderPath, saving {
+            let filePath = (folder as NSString).appendingPathComponent(ts.filename())
+            try? data.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
         }
     }
     
-    public func startSaving(folder: String) {
+    open func startSaving(_ folder: String) {
         saveFolderPath = folder
-        if !NSFileManager.defaultManager().fileExistsAtPath(folder) {
+        if !FileManager.default.fileExists(atPath: folder) {
             do {
-                try NSFileManager.defaultManager().createDirectoryAtPath(folder, withIntermediateDirectories: true, attributes: nil)
+                try FileManager.default.createDirectory(atPath: folder, withIntermediateDirectories: true, attributes: nil)
             } catch {
                 print("create saving folder failed");
                 return
@@ -131,13 +131,13 @@ public class KSLiveProvider: KSStreamProvider {
         synced(segmentFence, closure: { [unowned self] in
             for filename in self.segmentData.keys {
                 let data = self.segmentData[filename]
-                let filePath = (folder as NSString).stringByAppendingPathComponent(filename)
-                data?.writeToFile(filePath, atomically: true)
+                let filePath = (folder as NSString).appendingPathComponent(filename)
+                try? data?.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
             }
         })
     }
     
-    public func stopSaving() {
+    open func stopSaving() {
         saving = false
         saveFolderPath = nil
     }
@@ -145,7 +145,7 @@ public class KSLiveProvider: KSStreamProvider {
     /**
         Provide latest output playlist.
      */
-    override public func providePlaylist() -> String? {
+    override open func providePlaylist() -> String? {
         /* If we don't have enough segments, start buffering. */
         if outputSegments.count < Config.tsPrebufferSize {
             buffering = true
@@ -166,7 +166,7 @@ public class KSLiveProvider: KSStreamProvider {
         return outputPlaylist
     }
     
-    private func updateOutputPlaylist() -> Bool {
+    fileprivate func updateOutputPlaylist() -> Bool {
         return synced(segmentFence, closure:{ [unowned self] () -> Bool in
             /* Check if plyalist should change */
             var changed = false
@@ -179,7 +179,7 @@ public class KSLiveProvider: KSStreamProvider {
                 }
                 /* If we have new segments, change playlist. */
                 if i == self.outputSegments.count - 1 {
-                    if let index = self.segments.indexOf(ts) where self.segments.count > index + 1 {
+                    if let index = self.segments.index(of: ts), self.segments.count > index + 1 {
                         let nextNewSegment = self.segments[index + 1]
                         changed = self.segmentData[nextNewSegment.filename()] != nil
                     }
@@ -191,7 +191,7 @@ public class KSLiveProvider: KSStreamProvider {
             /* Update playlist */
             var startIndex = 0
             if self.outputSegments.count > 0 {
-                if let index = self.segments.indexOf(self.outputSegments.last!) {
+                if let index = self.segments.index(of: self.outputSegments.last!) {
                     startIndex = index
                 }
             }
@@ -205,7 +205,7 @@ public class KSLiveProvider: KSStreamProvider {
             /* Remove old segments in playlist and increase sequence number. */
             if self.outputSegments.count > Config.playlistSegmentSize {
                 let offset = self.outputSegments.count - Config.playlistSegmentSize
-                self.outputSegments.removeRange(Range(start: 0, end: offset))
+                self.outputSegments.removeSubrange((0 ..< offset))
                 self.sequenceNumber += offset
             }
             /* Generate playlist */

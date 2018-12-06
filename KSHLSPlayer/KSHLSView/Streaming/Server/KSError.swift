@@ -13,13 +13,13 @@ public struct KSError {
     public static let Domain = "ks.stream.error"
     
     public enum Code: Int {
-        case PlaylistUnchanged      = -1
-        case PlaylistUnavailable    = -2
-        case PlaylistNotFound       = -3
-        case PlaylistIsEmpty        = -4
-        case AuthenticationFailed   = -5
-        case InvaildUrl             = -6
-        case AccessDenied           = -7
+        case playlistUnchanged      = -1
+        case playlistUnavailable    = -2
+        case playlistNotFound       = -3
+        case playlistIsEmpty        = -4
+        case authenticationFailed   = -5
+        case invaildUrl             = -6
+        case accessDenied           = -7
     }
     
     public let code: Code

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		42383F76A10DE891C1B2897C /* Pods_KSHLSPlayerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91D6E2238CA2D39C4149EEF8 /* Pods_KSHLSPlayerUITests.framework */; };
+		6C3E43F3B9D850834F594671 /* Pods_KSHLSPlayerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 545134736837D5C82BBC5462 /* Pods_KSHLSPlayerTests.framework */; };
+		84AD1D24B0594F062E76D3CC /* Pods_KSHLSPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EECC9DA87888352503849B96 /* Pods_KSHLSPlayer.framework */; };
 		BE005C5F1C4E14BD00E4FFF5 /* KSEventStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE005C5E1C4E14BD00E4FFF5 /* KSEventStorage.swift */; };
 		BE005C611C4E3C2500E4FFF5 /* KSStreamProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE005C601C4E3C2500E4FFF5 /* KSStreamProvider.swift */; };
 		BE18E7851C4CBE9D00BB74C7 /* SyncFunc.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE18E7841C4CBE9D00BB74C7 /* SyncFunc.swift */; };
@@ -25,8 +28,6 @@
 		BEEB05DE1C43F3DB00379DA4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BEEB05DC1C43F3DB00379DA4 /* LaunchScreen.storyboard */; };
 		BEEB05E91C43F3DB00379DA4 /* KSHLSPlayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEB05E81C43F3DB00379DA4 /* KSHLSPlayerTests.swift */; };
 		BEEB05F41C43F3DC00379DA4 /* KSHLSPlayerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEB05F31C43F3DC00379DA4 /* KSHLSPlayerUITests.swift */; };
-		BEEB06021C43F40700379DA4 /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = BEEB06011C43F40700379DA4 /* Cartfile */; };
-		BEEB06041C43F4D900379DA4 /* Swifter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEEB06031C43F4D900379DA4 /* Swifter.framework */; };
 		BEEB06151C4422BF00379DA4 /* KSStreamReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEB06141C4422BF00379DA4 /* KSStreamReceiver.swift */; };
 		BEFA3A321C5384B700AEFF48 /* KSLiveServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFA3A311C5384B700AEFF48 /* KSLiveServer.swift */; };
 		BEFA3A341C5384C200AEFF48 /* KSEventServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFA3A331C5384C200AEFF48 /* KSEventServer.swift */; };
@@ -50,6 +51,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		137E965AA961AE6D702E60B9 /* Pods-KSHLSPlayerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KSHLSPlayerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KSHLSPlayerTests/Pods-KSHLSPlayerTests.release.xcconfig"; sourceTree = "<group>"; };
+		2AA9006B6B1045E7540EC5BD /* Pods-KSHLSPlayerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KSHLSPlayerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KSHLSPlayerTests/Pods-KSHLSPlayerTests.debug.xcconfig"; sourceTree = "<group>"; };
+		3BE2967F1C4A4616984832A3 /* Pods-KSHLSPlayerUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KSHLSPlayerUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KSHLSPlayerUITests/Pods-KSHLSPlayerUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		545134736837D5C82BBC5462 /* Pods_KSHLSPlayerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KSHLSPlayerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AB58CB15690AD1178B8E741 /* Pods-KSHLSPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KSHLSPlayer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KSHLSPlayer/Pods-KSHLSPlayer.debug.xcconfig"; sourceTree = "<group>"; };
+		91D6E2238CA2D39C4149EEF8 /* Pods_KSHLSPlayerUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KSHLSPlayerUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC8B8A786BECC2E0031831BC /* Pods-KSHLSPlayerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KSHLSPlayerUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-KSHLSPlayerUITests/Pods-KSHLSPlayerUITests.release.xcconfig"; sourceTree = "<group>"; };
 		BE005C5E1C4E14BD00E4FFF5 /* KSEventStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KSEventStorage.swift; sourceTree = "<group>"; };
 		BE005C601C4E3C2500E4FFF5 /* KSStreamProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KSStreamProvider.swift; sourceTree = "<group>"; };
 		BE18E7841C4CBE9D00BB74C7 /* SyncFunc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncFunc.swift; sourceTree = "<group>"; };
@@ -74,11 +82,11 @@
 		BEEB05EF1C43F3DC00379DA4 /* KSHLSPlayerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KSHLSPlayerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEEB05F31C43F3DC00379DA4 /* KSHLSPlayerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KSHLSPlayerUITests.swift; sourceTree = "<group>"; };
 		BEEB05F51C43F3DC00379DA4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BEEB06011C43F40700379DA4 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
-		BEEB06031C43F4D900379DA4 /* Swifter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Swifter.framework; path = Carthage/Build/iOS/Swifter.framework; sourceTree = "<group>"; };
 		BEEB06141C4422BF00379DA4 /* KSStreamReceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KSStreamReceiver.swift; sourceTree = "<group>"; };
 		BEFA3A311C5384B700AEFF48 /* KSLiveServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KSLiveServer.swift; sourceTree = "<group>"; };
 		BEFA3A331C5384C200AEFF48 /* KSEventServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KSEventServer.swift; sourceTree = "<group>"; };
+		EA2507B78C65AD919FF43B1E /* Pods-KSHLSPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KSHLSPlayer.release.xcconfig"; path = "Pods/Target Support Files/Pods-KSHLSPlayer/Pods-KSHLSPlayer.release.xcconfig"; sourceTree = "<group>"; };
+		EECC9DA87888352503849B96 /* Pods_KSHLSPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KSHLSPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,7 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BEEB06041C43F4D900379DA4 /* Swifter.framework in Frameworks */,
+				84AD1D24B0594F062E76D3CC /* Pods_KSHLSPlayer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +102,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C3E43F3B9D850834F594671 /* Pods_KSHLSPlayerTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,6 +110,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42383F76A10DE891C1B2897C /* Pods_KSHLSPlayerUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,12 +137,12 @@
 		BEEB05C71C43F3DB00379DA4 = {
 			isa = PBXGroup;
 			children = (
-				BEEB06011C43F40700379DA4 /* Cartfile */,
 				BEEB05D21C43F3DB00379DA4 /* KSHLSPlayer */,
 				BEEB06061C43F56700379DA4 /* Frameworks */,
 				BEEB05E71C43F3DB00379DA4 /* KSHLSPlayerTests */,
 				BEEB05F21C43F3DC00379DA4 /* KSHLSPlayerUITests */,
 				BEEB05D11C43F3DB00379DA4 /* Products */,
+				E456CC5571C2A9FF53820B85 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -181,7 +191,9 @@
 		BEEB06061C43F56700379DA4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				BEEB06031C43F4D900379DA4 /* Swifter.framework */,
+				EECC9DA87888352503849B96 /* Pods_KSHLSPlayer.framework */,
+				545134736837D5C82BBC5462 /* Pods_KSHLSPlayerTests.framework */,
+				91D6E2238CA2D39C4149EEF8 /* Pods_KSHLSPlayerUITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -246,6 +258,19 @@
 			path = Storage;
 			sourceTree = "<group>";
 		};
+		E456CC5571C2A9FF53820B85 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8AB58CB15690AD1178B8E741 /* Pods-KSHLSPlayer.debug.xcconfig */,
+				EA2507B78C65AD919FF43B1E /* Pods-KSHLSPlayer.release.xcconfig */,
+				2AA9006B6B1045E7540EC5BD /* Pods-KSHLSPlayerTests.debug.xcconfig */,
+				137E965AA961AE6D702E60B9 /* Pods-KSHLSPlayerTests.release.xcconfig */,
+				3BE2967F1C4A4616984832A3 /* Pods-KSHLSPlayerUITests.debug.xcconfig */,
+				BC8B8A786BECC2E0031831BC /* Pods-KSHLSPlayerUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -253,10 +278,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BEEB05F81C43F3DC00379DA4 /* Build configuration list for PBXNativeTarget "KSHLSPlayer" */;
 			buildPhases = (
+				ECBC22A271A3E4873F2B7E7F /* [CP] Check Pods Manifest.lock */,
 				BEEB05CC1C43F3DB00379DA4 /* Sources */,
 				BEEB05CD1C43F3DB00379DA4 /* Frameworks */,
 				BEEB05CE1C43F3DB00379DA4 /* Resources */,
-				BEEB06051C43F50900379DA4 /* ShellScript */,
+				18AAA5DB7D2907F74CAED38E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -271,6 +297,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BEEB05FB1C43F3DC00379DA4 /* Build configuration list for PBXNativeTarget "KSHLSPlayerTests" */;
 			buildPhases = (
+				0A4C2330B4ADF30A3FCD22E0 /* [CP] Check Pods Manifest.lock */,
 				BEEB05E01C43F3DB00379DA4 /* Sources */,
 				BEEB05E11C43F3DB00379DA4 /* Frameworks */,
 				BEEB05E21C43F3DB00379DA4 /* Resources */,
@@ -289,6 +316,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BEEB05FE1C43F3DC00379DA4 /* Build configuration list for PBXNativeTarget "KSHLSPlayerUITests" */;
 			buildPhases = (
+				DF7F8CCDB861FDA5FB3E5E20 /* [CP] Check Pods Manifest.lock */,
 				BEEB05EB1C43F3DC00379DA4 /* Sources */,
 				BEEB05EC1C43F3DC00379DA4 /* Frameworks */,
 				BEEB05ED1C43F3DC00379DA4 /* Resources */,
@@ -315,13 +343,16 @@
 				TargetAttributes = {
 					BEEB05CF1C43F3DB00379DA4 = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0830;
 					};
 					BEEB05E31C43F3DB00379DA4 = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0830;
 						TestTargetID = BEEB05CF1C43F3DB00379DA4;
 					};
 					BEEB05EE1C43F3DC00379DA4 = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0830;
 						TestTargetID = BEEB05CF1C43F3DB00379DA4;
 					};
 				};
@@ -353,7 +384,6 @@
 			files = (
 				BEEB05DE1C43F3DB00379DA4 /* LaunchScreen.storyboard in Resources */,
 				BEEB05DB1C43F3DB00379DA4 /* Assets.xcassets in Resources */,
-				BEEB06021C43F40700379DA4 /* Cartfile in Resources */,
 				BEEB05D91C43F3DB00379DA4 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -375,19 +405,77 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		BEEB06051C43F50900379DA4 /* ShellScript */ = {
+		0A4C2330B4ADF30A3FCD22E0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Swifter.framework",
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-KSHLSPlayerTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		18AAA5DB7D2907F74CAED38E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-KSHLSPlayer/Pods-KSHLSPlayer-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Swifter/Swifter.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swifter.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-KSHLSPlayer/Pods-KSHLSPlayer-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DF7F8CCDB861FDA5FB3E5E20 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-KSHLSPlayerUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		ECBC22A271A3E4873F2B7E7F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-KSHLSPlayer-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -551,65 +639,69 @@
 		};
 		BEEB05F91C43F3DC00379DA4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8AB58CB15690AD1178B8E741 /* Pods-KSHLSPlayer.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = KSHLSPlayer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.ks.KSHLSPlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		BEEB05FA1C43F3DC00379DA4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA2507B78C65AD919FF43B1E /* Pods-KSHLSPlayer.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = KSHLSPlayer/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.ks.KSHLSPlayer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
 		BEEB05FC1C43F3DC00379DA4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2AA9006B6B1045E7540EC5BD /* Pods-KSHLSPlayerTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = KSHLSPlayerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.ks.KSHLSPlayerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KSHLSPlayer.app/KSHLSPlayer";
 			};
 			name = Debug;
 		};
 		BEEB05FD1C43F3DC00379DA4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 137E965AA961AE6D702E60B9 /* Pods-KSHLSPlayerTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = KSHLSPlayerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.ks.KSHLSPlayerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KSHLSPlayer.app/KSHLSPlayer";
 			};
 			name = Release;
 		};
 		BEEB05FF1C43F3DC00379DA4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3BE2967F1C4A4616984832A3 /* Pods-KSHLSPlayerUITests.debug.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = KSHLSPlayerUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.ks.KSHLSPlayerUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = KSHLSPlayer;
 				USES_XCTRUNNER = YES;
 			};
@@ -617,11 +709,13 @@
 		};
 		BEEB06001C43F3DC00379DA4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BC8B8A786BECC2E0031831BC /* Pods-KSHLSPlayerUITests.release.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = KSHLSPlayerUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.ks.KSHLSPlayerUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = KSHLSPlayer;
 				USES_XCTRUNNER = YES;
 			};

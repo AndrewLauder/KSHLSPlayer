@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class KSLiveReceiver: KSStreamReciever {
+open class KSLiveReceiver: KSStreamReciever {
     
     struct Config {
         /**
@@ -28,18 +28,18 @@ public class KSLiveReceiver: KSStreamReciever {
         return. If this happens, we're falling behind too much. Should catchup by skipping some
         segments.
     */
-    private var tsFallBehind = false
+    fileprivate var tsFallBehind = false
     
     
-    public func start() {
+    open func start() {
         startPollingPlaylist()
     }
     
-    public func stop() {
+    open func stop() {
         stopPollingPlaylist()
     }
     
-    override func playlistDidFail(response: NSHTTPURLResponse?, error: NSError?) {
+    override func playlistDidFail(_ response: HTTPURLResponse?, error: NSError?) {
         delegate?.receiver(self, playlistDidFailWithError: error, urlStatusCode: (response?.statusCode) ?? 0)
     }
     
@@ -97,7 +97,7 @@ public class KSLiveReceiver: KSStreamReciever {
                 To minimize live delay, start from `Config.segmentCatchupSize`.
             */
             if self.tsDownloads.count == 0 {
-                for var i = 0; i < self.segments.count; i++ {
+                for i in 0..<self.segments.count {
                     if i < 0 { continue }
                     if self.isSegmentConnectionFull() { break }
                     self.downloadSegment(self.segments[i])
@@ -110,7 +110,8 @@ public class KSLiveReceiver: KSStreamReciever {
             */
             else {
                 var index = -1
-                for var i = self.segments.count - 1; i >= 0; i-- {
+                for i in (0 ..< self.segments.count).reversed() {
+//                for var i = self.segments.count - 1; i >= 0; i = i - 1 {
                     if self.tsDownloads.contains(self.segments[i].url) {
                         break
                     }
@@ -125,7 +126,8 @@ public class KSLiveReceiver: KSStreamReciever {
                         }
                     }
                 } else if index >= 0 {
-                    for var i = self.segments.count - Config.segmentCatchupSize; i < self.segments.count; i++ {
+                    for i in self.segments.count-Config.segmentCatchupSize..<self.segments.count {
+//                    for var i = self.segments.count - Config.segmentCatchupSize; i < self.segments.count; i += 1 {
                         if self.isSegmentConnectionFull() { break }
                         let ts = self.segments[i]
                         if !self.tsDownloads.contains(ts.url) {
@@ -138,7 +140,7 @@ public class KSLiveReceiver: KSStreamReciever {
         })
     }
     
-    override func segmentDidFail(ts: TSSegment, response: NSHTTPURLResponse?, error: NSError?) {
+    override func segmentDidFail(_ ts: TSSegment, response: HTTPURLResponse?, error: NSError?) {
         if response?.statusCode == 404 {
             tsFallBehind = true
         }
@@ -146,18 +148,18 @@ public class KSLiveReceiver: KSStreamReciever {
         super.segmentDidFail(ts, response: response, error: error)
     }
     
-    override func willDownloadSegment(ts: TSSegment) {
+    override func willDownloadSegment(_ ts: TSSegment) {
         delegate?.receiver(self, didPushSegment: ts)
     }
     
-    override func didDownloadSegment(ts: TSSegment, data: NSData) {
+    override func didDownloadSegment(_ ts: TSSegment, data: Data) {
         delegate?.receiver(self, didReceiveSegment: ts, data: data)
     }
 }
 
 protocol KSLiveReceiverDelegate: KSStreamReceiverDelegate {
     
-    func receiver(receiver: KSLiveReceiver, didPushSegment segment: TSSegment)
+    func receiver(_ receiver: KSLiveReceiver, didPushSegment segment: TSSegment)
     
-    func receiver(receiver: KSLiveReceiver, didDropSegment segment: TSSegment)
+    func receiver(_ receiver: KSLiveReceiver, didDropSegment segment: TSSegment)
 }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class KSEventReceiver: KSStreamReciever {
+open class KSEventReceiver: KSStreamReciever {
     
     struct Config {
         /**
@@ -19,27 +19,27 @@ public class KSEventReceiver: KSStreamReciever {
     
     weak var delegate: KSEventReceiverDelegate?
     
-    private var pendingSegments: [TSSegment] = []
+    fileprivate var pendingSegments: [TSSegment] = []
     
-    private(set) public var paused = false
+    fileprivate(set) open var paused = false
     
-    private(set) public var pending = false
+    fileprivate(set) open var pending = false
 
-    public func start() {
+    open func start() {
         startPollingPlaylist()
     }
     
-    public func stop() {
+    open func stop() {
         stopPollingPlaylist()
     }
     
-    public func pause() {
+    open func pause() {
         if paused { return }
         paused = true
         stopPollingPlaylist()
     }
     
-    public func resume() {
+    open func resume() {
         if !paused { return }
         paused = false
         startPollingPlaylist()
@@ -48,7 +48,7 @@ public class KSEventReceiver: KSStreamReciever {
         }
     }
     
-    private func resumeFromPending() {
+    fileprivate func resumeFromPending() {
         if pollingPlaylist && pending && pendingSegments.count < Config.pendingSegmentMax {
             pending = false
             getPlaylist()
@@ -68,7 +68,7 @@ public class KSEventReceiver: KSStreamReciever {
         super.getPlaylist()
     }
     
-    override func playlistDidFail(response: NSHTTPURLResponse?, error: NSError?) {
+    override func playlistDidFail(_ response: HTTPURLResponse?, error: NSError?) {
         delegate?.receiver(self, playlistDidFailWithError: error, urlStatusCode: (response?.statusCode) ?? 0)
     }
     
@@ -94,7 +94,7 @@ public class KSEventReceiver: KSStreamReciever {
             /* We don't keep segment list too long */
             if self.segments.count > Config.segmentWindowSize {
                 let overflow = self.segments.count - Config.segmentWindowSize
-                self.segments.removeRange(Range(start: 0, end: overflow))
+                self.segments.removeSubrange((0 ..< overflow))
             }
         })
         
@@ -133,8 +133,8 @@ public class KSEventReceiver: KSStreamReciever {
             /* Remove ignored segments */
             if ignoreSegments.count > 0 {
                 for ignore in ignoreSegments {
-                    if let index = self.pendingSegments.indexOf(ignore) {
-                        self.pendingSegments.removeAtIndex(index)
+                    if let index = self.pendingSegments.index(of: ignore) {
+                        self.pendingSegments.remove(at: index)
                     }
                 }
                 
@@ -142,24 +142,24 @@ public class KSEventReceiver: KSStreamReciever {
                 self.resumeFromPending()
                 
                 // continue to download segments
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     self.getSegments()
                 })
             }
         })
     }
     
-    override func didDownloadSegment(ts: TSSegment, data: NSData) {
+    override func didDownloadSegment(_ ts: TSSegment, data: Data) {
         /* Remove from pending list */
         synced(segmentFence, closure: { [unowned self] in
-            if let index = self.pendingSegments.indexOf(ts) {
-                self.pendingSegments.removeAtIndex(index)
+            if let index = self.pendingSegments.index(of: ts) {
+                self.pendingSegments.remove(at: index)
             }
         })
         delegate?.receiver(self, didReceiveSegment: ts, data: data)
     }
     
-    override func finishSegment(ts: TSSegment) {
+    override func finishSegment(_ ts: TSSegment) {
         /* Try to resume from pending */
         resumeFromPending()
         super.finishSegment(ts)
@@ -168,9 +168,9 @@ public class KSEventReceiver: KSStreamReciever {
 
 protocol KSEventReceiverDelegate: KSStreamReceiverDelegate {
     
-    func receiver(receiver: KSEventReceiver, playlistDidEnd playlist: HLSPlaylist)
+    func receiver(_ receiver: KSEventReceiver, playlistDidEnd playlist: HLSPlaylist)
     
-    func receiver(receiver: KSEventReceiver, didPushSegments segments: [TSSegment])
+    func receiver(_ receiver: KSEventReceiver, didPushSegments segments: [TSSegment])
     
-    func receiver(receiver: KSEventReceiver, shouldDownloadSegment segment: TSSegment) -> Bool
+    func receiver(_ receiver: KSEventReceiver, shouldDownloadSegment segment: TSSegment) -> Bool
 }

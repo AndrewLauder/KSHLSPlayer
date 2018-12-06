@@ -9,7 +9,7 @@
 import Foundation
 import Swifter
 
-public class KSStreamServer {
+open class KSStreamServer {
     
     struct Config {
         /**
@@ -48,7 +48,7 @@ public class KSStreamServer {
      */
     internal var httpServer: HttpServer?
     
-    internal(set) public var streaming = false
+    internal(set) open var streaming = false
     
     internal var serviceReadyNotified = false
     
@@ -56,18 +56,18 @@ public class KSStreamServer {
     
     internal var playlistUnchangeTimes = 0
     
-    private var idleTimer: NSTimer?
+    fileprivate var idleTimer: Timer?
     
     public init(source: String) {
         self.sourceUrl = source
     }
     
-    public func playlistUrl() -> String? {
+    open func playlistUrl() -> String? {
         return serviceUrl != nil ? serviceUrl + "/" + Config.playlistFilename : nil
     }
     
     // override
-    public func startService() -> Bool {
+    open func startService() -> Bool {
         if streaming { return false }
         streaming = true
         serviceReadyNotified = false
@@ -76,17 +76,17 @@ public class KSStreamServer {
         return true
     }
     // override
-    public func stopService() {
+    open func stopService() {
         streaming = false
         stopIdleTimer()
         httpServer?.stop()
     }
     // override
-    public func outputPlaylist() -> String? {
+    open func outputPlaylist() -> String? {
         return nil
     }
     // override
-    public func outputSegmentData(filename: String) -> NSData? {
+    open func outputSegmentData(_ filename: String) -> Data? {
         return nil
     }
     
@@ -96,23 +96,23 @@ public class KSStreamServer {
             // m3u8
             server["/" + Config.playlistFilename] = { [weak self] request in
                 if let m3u8 = self?.outputPlaylist() {
-                    return .OK(.Text(m3u8))
+                    return HttpResponse.ok(.text(m3u8))
                 } else {
-                    return .NotFound
+                    return HttpResponse.notFound
                 }
             }
             // ts
             server["/(.+).ts"] = { [weak self] request in
                 if let filename = request.path.split("/").last {
                     if let data = self?.outputSegmentData(filename) {
-                        return .RAW(200, "OK", nil, { writer in
-                            writer.write(data.byteArray())
+                        return HttpResponse.raw(200, "OK", nil, { (writer) in
+                            try writer.write(data.byteArray())
                         })
                     } else {
-                        return .NotFound
+                        return HttpResponse.notFound
                     }
                 } else {
-                    return .BadRequest
+                    return HttpResponse.badRequest(nil)
                 }
             }
             try server.start(Config.defaultPort)
@@ -121,7 +121,7 @@ public class KSStreamServer {
     
     internal func resetIdleTimer() {
         stopIdleTimer()
-        idleTimer = NSTimer.scheduledTimerWithTimeInterval(Config.clientIdleTimeout, target: self, selector: "clientDidIdle", userInfo: nil, repeats: false)
+        idleTimer = Timer.scheduledTimer(timeInterval: Config.clientIdleTimeout, target: self, selector: "clientDidIdle", userInfo: nil, repeats: false)
     }
     
     internal func stopIdleTimer() {
@@ -132,7 +132,7 @@ public class KSStreamServer {
     internal func serviceDidReady() {
         if serviceReadyNotified { return }
         
-        if let urlStr = playlistUrl(), url = NSURL(string: urlStr) where delegate != nil  {
+        if let urlStr = playlistUrl(), let url = URL(string: urlStr), delegate != nil  {
             serviceReadyNotified = true
             executeDelegateFunc({ _self in
                 _self.delegate?.streamServer(_self, streamDidReady: url)
@@ -140,17 +140,17 @@ public class KSStreamServer {
         }
     }
     
-    private func clientDidIdle() {
+    fileprivate func clientDidIdle() {
         executeDelegateFunc({ _self in
             _self.delegate?.streamServer(clientIdle: _self)
         })
     }
     
-    internal func executeDelegateFunc(block: (_self: KSStreamServer) -> ()) {
+    internal func executeDelegateFunc(_ block: @escaping (_ _self: KSStreamServer) -> ()) {
         if delegate != nil {
-            dispatch_async(dispatch_get_main_queue(), { [weak self] in
+            DispatchQueue.main.async(execute: { [weak self] in
                 if let weakSelf = self {
-                    block(_self: weakSelf)
+                    block(weakSelf)
                 }
             })
         }
@@ -159,18 +159,18 @@ public class KSStreamServer {
 
 public protocol KSStreamServerDelegate: class {
     
-    func streamServer(server: KSStreamServer, streamDidReady url: NSURL)
+    func streamServer(_ server: KSStreamServer, streamDidReady url: URL)
     
-    func streamServer(server: KSStreamServer, streamDidFail error: KSError)
+    func streamServer(_ server: KSStreamServer, streamDidFail error: KSError)
     
-    func streamServer(server: KSStreamServer, playlistDidEnd playlist: HLSPlaylist)
+    func streamServer(_ server: KSStreamServer, playlistDidEnd playlist: HLSPlaylist)
     
     func streamServer(clientIdle server: KSStreamServer)
 }
 
-extension NSData {
+extension Data {
     
     func byteArray() -> [UInt8] {
-        return Array(UnsafeBufferPointer(start: UnsafePointer<UInt8>(self.bytes), count: self.length))
+        return Array(UnsafeBufferPointer(start: (self as NSData).bytes.bindMemory(to: UInt8.self, capacity: self.count), count: self.count))
     }
 }

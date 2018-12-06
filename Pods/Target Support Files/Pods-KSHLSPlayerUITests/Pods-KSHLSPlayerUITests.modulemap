@@ -1,0 +1,6 @@
+framework module Pods_KSHLSPlayerUITests {
+  umbrella header "Pods-KSHLSPlayerUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

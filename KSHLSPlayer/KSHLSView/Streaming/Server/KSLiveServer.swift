@@ -8,14 +8,14 @@
 
 import Foundation
 
-public class KSLiveServer: KSStreamServer, KSLiveReceiverDelegate {
+open class KSLiveServer: KSStreamServer, KSLiveReceiverDelegate {
     
-    private var receiver: KSLiveReceiver!
+    fileprivate var receiver: KSLiveReceiver!
     
-    private var provider: KSLiveProvider!
+    fileprivate var provider: KSLiveProvider!
     
     // override
-    public override func startService() -> Bool {
+    open override func startService() -> Bool {
         if !super.startService() { return false }
         /* Prepare http server */
         do {
@@ -38,7 +38,7 @@ public class KSLiveServer: KSStreamServer, KSLiveReceiverDelegate {
         return true
     }
     // override
-    public override func stopService() {
+    open override func stopService() {
         super.stopService()
         receiver?.stop()
         receiver = nil
@@ -46,26 +46,26 @@ public class KSLiveServer: KSStreamServer, KSLiveReceiverDelegate {
         provider = nil
     }
     // override
-    public override func outputPlaylist() -> String? {
+    open override func outputPlaylist() -> String? {
         resetIdleTimer()
         return provider?.providePlaylist()
     }
     // override
-    public override func outputSegmentData(filename: String) -> NSData? {
+    open override func outputSegmentData(_ filename: String) -> Data? {
         return provider?.provideSegment(filename)
     }
     
-    public func startRecording(folderPath: String) {
+    open func startRecording(_ folderPath: String) {
         provider?.startSaving(folderPath)
     }
     
-    public func stopRecording() {
+    open func stopRecording() {
         provider?.stopSaving()
     }
     
     // MARK: - KSLiveReceiverDelegate
     
-    func receiver(receiver: KSStreamReciever, didReceivePlaylist playlist: HLSPlaylist) {
+    func receiver(_ receiver: KSStreamReciever, didReceivePlaylist playlist: HLSPlaylist) {
         if playlistUnchangeTimes > 0 {
             playlistUnchangeTimes = 0
         }
@@ -75,58 +75,58 @@ public class KSLiveServer: KSStreamServer, KSLiveReceiverDelegate {
         provider.targetDuration = playlist.targetDuration
     }
     
-    func receiver(receiver: KSStreamReciever, playlistDidNotChange playlist: HLSPlaylist) {
+    func receiver(_ receiver: KSStreamReciever, playlistDidNotChange playlist: HLSPlaylist) {
         if playlistFailureTimes > 0 {
             playlistFailureTimes = 0
         }
-        playlistUnchangeTimes++
+        playlistUnchangeTimes += 1
         if playlistUnchangeTimes > Config.playlistUnchangeMax {
             executeDelegateFunc({ _self in
-                _self.delegate?.streamServer(_self, streamDidFail: KSError(code: .PlaylistUnchanged))
+                _self.delegate?.streamServer(_self, streamDidFail: KSError(code: .playlistUnchanged))
             })
             stopService()
         }
     }
     
-    func receiver(receiver: KSStreamReciever, playlistDidFailWithError error: NSError?, urlStatusCode code: Int) {
+    func receiver(_ receiver: KSStreamReciever, playlistDidFailWithError error: NSError?, urlStatusCode code: Int) {
         if code == 404 {
             executeDelegateFunc({ _self in
-                _self.delegate?.streamServer(_self, streamDidFail: KSError(code: .PlaylistNotFound))
+                _self.delegate?.streamServer(_self, streamDidFail: KSError(code: .playlistNotFound))
             })
             stopService()
         } else if code == 403 {
             executeDelegateFunc({ _self in
-                _self.delegate?.streamServer(_self, streamDidFail: KSError(code: .AccessDenied))
+                _self.delegate?.streamServer(_self, streamDidFail: KSError(code: .accessDenied))
             })
             stopService()
         } else {
-            playlistFailureTimes++
+            playlistFailureTimes += 1
             if playlistFailureTimes > Config.playlistFailureMax {
                 executeDelegateFunc({ _self in
-                    _self.delegate?.streamServer(_self, streamDidFail: KSError(code: .PlaylistUnavailable))
+                    _self.delegate?.streamServer(_self, streamDidFail: KSError(code: .playlistUnavailable))
                 })
                 stopService()
             }
         }
     }
     
-    func receiver(receiver: KSStreamReciever, didReceiveSegment segment: TSSegment, data: NSData) {
+    func receiver(_ receiver: KSStreamReciever, didReceiveSegment segment: TSSegment, data: Data) {
         provider?.fill(segment, data: data)
-        if let p = provider where p.isBufferEnough() {
+        if let p = provider, p.isBufferEnough() {
             serviceDidReady()
         }
     }
     
-    func receiver(receiver: KSEventReceiver, segmentDidFail segment: TSSegment, withError error: NSError?) {
+    func receiver(_ receiver: KSEventReceiver, segmentDidFail segment: TSSegment, withError error: NSError?) {
         print("Download ts failed - \(segment.url)")
         provider?.drop(segment)
     }
     
-    func receiver(receiver: KSLiveReceiver, didPushSegment segment: TSSegment) {
+    func receiver(_ receiver: KSLiveReceiver, didPushSegment segment: TSSegment) {
         provider?.push(segment)
     }
     
-    func receiver(receiver: KSLiveReceiver, didDropSegment segment: TSSegment) {
+    func receiver(_ receiver: KSLiveReceiver, didDropSegment segment: TSSegment) {
         provider?.drop(segment)
     }
 }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class TSSegment: Equatable {
+open class TSSegment: Equatable {
     
     let url: String
     

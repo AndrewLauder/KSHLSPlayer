@@ -9,14 +9,14 @@
 import Foundation
 
 let documentDirectory: String = {
-    NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+    NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
 }()
 
-func documentFile(filename: String) -> String {
+func documentFile(_ filename: String) -> String {
     return documentDirectory + "/" + filename
 }
 
-public class KSEventStorage {
+open class KSEventStorage {
     
     static let root: String = documentFile("Events")
     
@@ -35,24 +35,24 @@ public class KSEventStorage {
     
     // MARK: - Storage Paths
     
-    public func folderPath() -> String {
-        return (KSEventStorage.root as NSString).stringByAppendingPathComponent(eventId)
+    open func folderPath() -> String {
+        return (KSEventStorage.root as NSString).appendingPathComponent(eventId)
     }
     
-    public func playlistPath() -> String {
-        return (folderPath() as NSString).stringByAppendingPathComponent("playlist.m3u8")
+    open func playlistPath() -> String {
+        return (folderPath() as NSString).appendingPathComponent("playlist.m3u8")
     }
     
-    public func tsPath(filename: String) -> String {
-        return (folderPath() as NSString).stringByAppendingPathComponent(filename)
+    open func tsPath(_ filename: String) -> String {
+        return (folderPath() as NSString).appendingPathComponent(filename)
     }
     
-    private func assureFolder() -> Bool {
-        let fm = NSFileManager()
+    fileprivate func assureFolder() -> Bool {
+        let fm = FileManager()
         let folder = folderPath()
-        if !fm.fileExistsAtPath(folder) {
+        if !fm.fileExists(atPath: folder) {
             do {
-                try fm.createDirectoryAtPath(folder, withIntermediateDirectories: true, attributes: nil)
+                try fm.createDirectory(atPath: folder, withIntermediateDirectories: true, attributes: nil)
             } catch {
                 print("Create folder for event \(eventId) failed.")
                 return false
@@ -61,11 +61,11 @@ public class KSEventStorage {
         return true
     }
     
-    private func removeFile(filePath: String) -> Bool {
-        let fm = NSFileManager()
-        if fm.fileExistsAtPath(filePath) {
+    fileprivate func removeFile(_ filePath: String) -> Bool {
+        let fm = FileManager()
+        if fm.fileExists(atPath: filePath) {
             do {
-                try fm.removeItemAtPath(filePath)
+                try fm.removeItem(atPath: filePath)
             } catch {
                 print("Remove file failed - \(filePath)")
                 return false
@@ -76,15 +76,15 @@ public class KSEventStorage {
     
     // MARK: - Playlist
     
-    public func loadPlaylist() -> HLSPlaylist? {
-        if let data = NSData(contentsOfFile: playlistPath()) {
+    open func loadPlaylist() -> HLSPlaylist? {
+        if let data = try? Data(contentsOf: URL(fileURLWithPath: playlistPath())) {
             return HLSPlaylist(data: data)
         } else {
             return nil
         }
     }
     
-    public func savePlaylist(text: String) -> Bool {
+    open func savePlaylist(_ text: String) -> Bool {
         // assure folder exists
         if !assureFolder() { return false }
         
@@ -95,7 +95,7 @@ public class KSEventStorage {
 
         // save file
         do {
-            try text.writeToFile(filePath, atomically: true, encoding: NSUTF8StringEncoding)
+            try text.write(toFile: filePath, atomically: true, encoding: String.Encoding.utf8)
             return true
         } catch {
             print("Save playlist for event \(eventId) failed.")
@@ -105,19 +105,19 @@ public class KSEventStorage {
     
     // MARK: - TS
     
-    public func tsFileExists(filename: String) -> Bool {
-        return NSFileManager().fileExistsAtPath(tsPath(filename))
+    open func tsFileExists(_ filename: String) -> Bool {
+        return FileManager().fileExists(atPath: tsPath(filename))
     }
     
-    public func loadTS(filename: String) -> NSData? {
+    open func loadTS(_ filename: String) -> Data? {
         do {
-            return try NSData.init(contentsOfFile: tsPath(filename), options: NSDataReadingOptions.UncachedRead)
+            return try Data.init(contentsOf: URL(fileURLWithPath: tsPath(filename)), options: NSData.ReadingOptions.uncachedRead)
         } catch {
             return nil
         }
     }
     
-    public func saveTS(data: NSData, filename: String) -> Bool {
+    open func saveTS(_ data: Data, filename: String) -> Bool {
         // assure folder exists
         if !assureFolder() { return false }
         
@@ -127,12 +127,12 @@ public class KSEventStorage {
         if !removeFile(filePath) { return false }
         
         // save file
-        return data.writeToFile(filePath, atomically: true)
+        return ((try? data.write(to: URL(fileURLWithPath: filePath), options: [.atomic])) != nil)
     }
     
-    public func deleteFiles() -> Bool {
+    open func deleteFiles() -> Bool {
         do {
-            try NSFileManager.defaultManager().removeItemAtPath(folderPath())
+            try FileManager.default.removeItem(atPath: folderPath())
             return true
         } catch {
             print("Delete event \(eventId) failed.")

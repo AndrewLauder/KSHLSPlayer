@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class HLSPlaylist {
+open class HLSPlaylist {
     
     struct Schema {
         static let Head = "#EXTM3U"
@@ -35,11 +35,11 @@ public class HLSPlaylist {
     
     var end: Bool?
     
-    private(set) public var segments: [TSSegment] = []
+    fileprivate(set) open var segments: [TSSegment] = []
     
-    private(set) public var segmentNames: [String] = []
+    fileprivate(set) open var segmentNames: [String] = []
     
-    private(set) public var discontinuity: Bool = false
+    fileprivate(set) open var discontinuity: Bool = false
     
     init(version: String?, targetDuration: Double?, sequence: Int?, segments: [TSSegment]) {
         self.version = version
@@ -51,40 +51,40 @@ public class HLSPlaylist {
         }
     }
     
-    init(data: NSData) {
-        if let text = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
+    init(data: Data) {
+        if let text = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as? String {
             parseText(text)
         }
     }
     
-    private func parseText(text: String) {
+    fileprivate func parseText(_ text: String) {
         segments = []
         segmentNames = []
         version = nil
         targetDuration = nil
         sequence = nil
         end = nil
-        let lines = text.componentsSeparatedByString("\n")
+        let lines = text.components(separatedBy: "\n")
         for i in 0..<lines.count {
             let str = lines[i]
             // target duration
             if targetDuration == nil && str.hasPrefix(Schema.TargetDuration) {
-                let value = str.substringFromIndex(Schema.TargetDuration.endIndex.successor())
+                let value = str.substring(from: Schema.TargetDuration.characters.index(after: Schema.TargetDuration.endIndex))
                 targetDuration = Double(value)
             }
             // version
             else if version == nil && str.hasPrefix(Schema.Version) {
-                version = str.substringFromIndex(Schema.Version.endIndex.successor())
+                version = str.substring(from: Schema.Version.characters.index(after: Schema.Version.endIndex))
             }
             // sequence
             else if sequence == nil && str.hasPrefix(Schema.Sequence) {
-                let value = str.substringFromIndex(Schema.Sequence.endIndex.successor())
+                let value = str.substring(from: Schema.Sequence.characters.index(after: Schema.Sequence.endIndex))
                 sequence = Int(value)
             }
             // segments
             else if str.hasPrefix(Schema.Inf) {
                 let seq = (sequence ?? 0) + segments.count
-                let value = str.substringWithRange(Schema.Inf.endIndex.successor()..<str.endIndex.predecessor())
+                let value = str.substring(with: Schema.Inf.characters.index(after: Schema.Inf.endIndex)..<str.characters.index(before: str.endIndex))
                 let ts = TSSegment(url: lines[i + 1], duration: Double(value)!, sequence: seq)
                 segments.append(ts)
                 segmentNames.append(ts.filename())
@@ -96,11 +96,11 @@ public class HLSPlaylist {
         }
     }
     
-    func generate(baseUrl: String?) -> String {
+    func generate(_ baseUrl: String?) -> String {
         return generate(baseUrl, end: isEnd())
     }
     
-    func generate(baseUrl: String?, end: Bool) -> String {
+    func generate(_ baseUrl: String?, end: Bool) -> String {
         // head
         var string = Schema.Head + "\n"
         // Type
@@ -141,7 +141,7 @@ public class HLSPlaylist {
         return end ?? false
     }
     
-    func addSegment(ts: TSSegment) {
+    func addSegment(_ ts: TSSegment) {
         segments += [ts]
         segmentNames += [ts.filename()]
     }
